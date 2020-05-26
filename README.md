@@ -10,4 +10,4 @@ matching of the terrain mesh's dual graph for preprocessing, and then
 the rendering itself is very fast.
 
 Requires a modern version of OpenGL and a C/C++ compiler.
-To install just run make.
+To build just run make.
