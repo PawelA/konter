@@ -1,0 +1,26 @@
+#!/bin/sh
+# A simple makefile generation script. Requires a coding style of not
+# putting includes in header files (so that no header guards are needed),
+# but rather including everything in the source files
+
+src=*.cpp\ *.c
+obj=$(for s in $src; do printf "%s " ${s%.*}.o; done)
+
+cat <<HERE
+LDLIBS = -lGL -lX11
+CFLAGS = -Wall -g
+CXXFLAGS = -Wall -g
+OBJ = $obj
+main: \$(OBJ)
+	\$(CXX) \$(LDFLAGS) \$(OBJ) \$(LDLIBS) -o main
+.PHONY: clean
+clean:
+	rm -f \$(OBJ)
+HERE
+
+for s in $src; do
+	printf "%s: %s " ${s%.*}.o $s
+	awk '/^#include "\w+\.h"$/ { printf "%s ", substr($2, 2, length($2)-2); }' $s
+	echo
+
+done
